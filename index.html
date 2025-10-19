@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>タンパク質バランス診断</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>タンパク質バランス診断</h1>
+
+  <form id="form">
+    <label>体重(kg)：<input type="number" id="weight" required></label><br>
+    <label>1日のタンパク質摂取量(g)：<input type="number" id="protein" required></label><br>
+    <label>1日の水分摂取量(L)：<input type="number" id="water" required></label><br>
+    <button type="button" onclick="calcScore()">診断する</button>
+  </form>
+
+  <h2 id="result"></h2>
+
+  <script src="script.js"></script>
+</body>
+</html>
