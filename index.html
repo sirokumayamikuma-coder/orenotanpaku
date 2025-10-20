@@ -1,22 +1,186 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <title>タンパク質バランス診断</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>腎臓負担スコア計算ツール（β版）</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: "Segoe UI", "Helvetica Neue", sans-serif;
+      background: linear-gradient(135deg, #f7f9fc, #e8ecf3);
+      color: #333;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    header {
+      margin-top: 40px;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 1.8rem;
+      font-weight: 600;
+      margin-bottom: 0.3em;
+    }
+
+    p.subtitle {
+      color: #666;
+      font-size: 0.95rem;
+      margin-bottom: 2em;
+    }
+
+    .card {
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+      padding: 2em;
+      width: 90%;
+      max-width: 420px;
+    }
+
+    .input-group {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 1.2em;
+    }
+
+    label {
+      font-weight: 500;
+      margin-bottom: 0.3em;
+    }
+
+    input {
+      padding: 0.7em;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 1rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    input:focus {
+      border-color: #007aff;
+    }
+
+    button {
+      background: #007aff;
+      color: white;
+      font-size: 1rem;
+      font-weight: 600;
+      border: none;
+      padding: 0.8em;
+      border-radius: 10px;
+      width: 100%;
+      cursor: pointer;
+      transition: background 0.3s, transform 0.1s;
+    }
+
+    button:hover {
+      background: #005ecb;
+      transform: translateY(-1px);
+    }
+
+    .result-card {
+      margin-top: 2em;
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+      padding: 1.5em;
+      text-align: center;
+      transition: opacity 0.3s ease;
+    }
+
+    .score {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #007aff;
+      margin-bottom: 0.2em;
+    }
+
+    .status {
+      font-weight: 600;
+      font-size: 1.1rem;
+    }
+
+    footer {
+      margin-top: auto;
+      padding: 2em;
+      font-size: 0.8rem;
+      color: #888;
+    }
+  </style>
 </head>
 <body>
-  <h1>タンパク質バランス診断</h1>
+  <header>
+    <h1>腎臓負担スコア計算ツール（β版）</h1>
+    <p class="subtitle">体重・水分量・タンパク質量から日々の腎臓負担をチェック</p>
+  </header>
 
-  <form id="form">
-    <label>体重(kg)：<input type="number" id="weight" required></label><br>
-    <label>1日のタンパク質摂取量(g)：<input type="number" id="protein" required></label><br>
-    <label>1日の水分摂取量(L)：<input type="number" id="water" required></label><br>
-    <button type="button" onclick="calcScore()">診断する</button>
-  </form>
+  <div class="card">
+    <div class="input-group">
+      <label for="weight">体重（kg）</label>
+      <input type="number" id="weight" placeholder="例：70" />
+    </div>
 
-  <h2 id="result"></h2>
+    <div class="input-group">
+      <label for="protein">1日のタンパク質摂取量（g）</label>
+      <input type="number" id="protein" placeholder="例：120" />
+    </div>
 
-  <script src="script.js"></script>
+    <div class="input-group">
+      <label for="water">1日の水分摂取量（L）</label>
+      <input type="number" id="water" placeholder="例：2.0" step="0.1" />
+    </div>
+
+    <button onclick="calculateScore()">計算する</button>
+
+    <div id="result" class="result-card" style="display:none;">
+      <div class="score" id="scoreValue">0</div>
+      <div class="status" id="statusText">結果がここに表示されます</div>
+    </div>
+  </div>
+
+  <footer>
+    © 2025 orenotanpaku - beta version
+  </footer>
+
+  <script>
+    function calculateScore() {
+      const weight = parseFloat(document.getElementById("weight").value);
+      const protein = parseFloat(document.getElementById("protein").value);
+      const water = parseFloat(document.getElementById("water").value);
+
+      if (isNaN(weight) || isNaN(protein) || isNaN(water)) {
+        alert("全ての項目を入力してください。");
+        return;
+      }
+
+      // タンパク質摂取量 (g/kg体重)
+      const proteinPerKg = protein / weight;
+
+      // 水分補正係数（2Lを基準）
+      const hydrationFactor = water < 1.5 ? 1.2 : water > 3 ? 0.8 : 1.0;
+
+      // 腎臓負担スコア（単純モデル）
+      const score = (proteinPerKg * 25) * hydrationFactor;
+
+      let status = "";
+      if (score < 60) {
+        status = "低負担：バランス良好";
+      } else if (score < 90) {
+        status = "中負担：水分や食事バランスを意識しましょう";
+      } else {
+        status = "高負担：タンパク質摂取量や水分量を見直してください";
+      }
+
+      document.getElementById("scoreValue").textContent = Math.round(score);
+      document.getElementById("statusText").textContent = status;
+      document.getElementById("result").style.display = "block";
+    }
+  </script>
 </body>
 </html>
