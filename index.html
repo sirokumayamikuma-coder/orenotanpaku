@@ -17,7 +17,7 @@
   "name": "腎臓負担スコア計算ツール（β版）",
   "url": "https://orenotanpaku.com/",
   "description": "体重・タンパク質摂取量・水分摂取量から日々の腎臓負担を自動計算できる無料Webツールです。",
-  "applicationCategory": "HealthApplication, FitnessTool",
+  "applicationCategory": ["HealthApplication", "FitnessApplication"],
   "operatingSystem": "All",
   "creator": {
     "@type": "Organization",
@@ -43,7 +43,6 @@
   <meta property="og:site_name" content="俺のタンパク">
   <meta name="twitter:card" content="summary_large_image">
   <meta property="og:locale" content="ja_JP">
-  <meta property="og:type" content="website">
 
  
 
@@ -60,10 +59,8 @@
   gtag('js', new Date());
 
   gtag('config', 'G-P6QP4YM98R');
-  gtag('event', 'page_view', {
-      'page_title': document.title,
-      'page_path': window.location.pathname
-  });
+ 
+    
 </script>
 
   
@@ -275,12 +272,8 @@
         gtag('event', 'calc_submit', {
           'event_category': 'tool',
           'event_label': 'kidney_score',
-          'value': Math.round(score)
-
-            // 追加（DebugView に出すため）
-            debug_mode: true,
-
-            // 任意：どのプロパティに送るか明示
+          'value': Math.round(score),
+          debug_mode: true,
             // send_to: 'G-P6QP4YM98R'
           
         });
@@ -289,6 +282,7 @@
   </script>
 </body>
 </html>
+
 
 
 
