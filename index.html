@@ -270,10 +270,19 @@
       document.getElementById("scoreValue").textContent = Math.round(score);
       document.getElementById("statusText").textContent = status;
       document.getElementById("result").style.display = "block";
+
+      if (window.gtag) {
+        gtag('event', 'calc_submit', {
+          'event_category': 'tool',
+          'event_label': 'kidney_score',
+          'value': Math.round(score)
+        });
+      }
     }
   </script>
 </body>
 </html>
+
 
 
 
