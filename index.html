@@ -198,11 +198,77 @@
 
     <button onclick="calculateScore()">計算する</button>
 
-    <div id="result" class="result-card" style="display:none;">
-      <div class="score" id="scoreValue">0</div>
-      <div class="status" id="statusText">結果がここに表示されます</div>
-    </div>
+<!-- 結果カード（フル版 / ミニ開示＋おすすめ枠付き） -->
+<div id="result" class="result-card" style="display:none;">
+  <!-- 計算結果表示 -->
+  <div class="score" id="scoreValue">0</div>
+  <div class="status" id="statusText">結果がここに表示されます</div>
+
+  <!-- ミニ開示（この下に表示するリンクが広告/アフィであることを明示） -->
+  <p role="note" style="margin:12px 0 8px; font-size:12px; color:#888; line-height:1.6;">
+    ※この下のリンクにはアフィリエイト広告が含まれる場合があります。
+    購入等により運営者に報酬が発生することがあります。詳細は
+    <a href="/privacy.html" style="color:#666; text-decoration:underline;">プライバシーポリシー</a> をご確認ください。
+  </p>
+
+  <!-- おすすめ（アフィリエイト）リンク枠 -->
+  <div id="offer-list" class="offer-list" style="display:grid; gap:12px;">
+    <!-- 例: アフィリンク #1 -->
+    <a
+      href="https://example.com/aff?ref=XXXXX"
+      target="_blank"
+      rel="sponsored noopener"
+      class="aff-link"
+      style="
+        display:block; padding:12px 14px; border:1px solid #e5e7eb; border-radius:10px;
+        text-decoration:none; color:#111; background:#fff; box-shadow:0 2px 8px rgba(0,0,0,0.04);
+      "
+    >
+      <strong style="display:block; font-size:14px;">高たんぱく・低脂質のおすすめ食品A</strong>
+      <span style="display:block; font-size:12px; color:#666; margin-top:4px;">
+        タンパク質◯g / 脂質◯g（1食あたり）｜レビュー良好
+      </span>
+    </a>
+
+    <!-- 例: アフィリンク #2 -->
+    <a
+      href="https://example.com/aff?ref=YYYYY"
+      target="_blank"
+      rel="sponsored noopener"
+      class="aff-link"
+      style="
+        display:block; padding:12px 14px; border:1px solid #e5e7eb; border-radius:10px;
+        text-decoration:none; color:#111; background:#fff; box-shadow:0 2px 8px rgba(0,0,0,0.04);
+      "
+    >
+      <strong style="display:block; font-size:14px;">カリウム控えめプロテインB</strong>
+      <span style="display:block; font-size:12px; color:#666; margin-top:4px;">
+        お腹に優しい配合｜飲みやすい味で継続しやすい
+      </span>
+    </a>
+
+    <!-- 例: アフィリンク #3 -->
+    <a
+      href="https://example.com/aff?ref=ZZZZZ"
+      target="_blank"
+      rel="sponsored noopener"
+      class="aff-link"
+      style="
+        display:block; padding:12px 14px; border:1px solid #e5e7eb; border-radius:10px;
+        text-decoration:none; color:#111; background:#fff; box-shadow:0 2px 8px rgba(0,0,0,0.04);
+      "
+    >
+      <strong style="display:block; font-size:14px;">減塩×高たんぱくレシピ本</strong>
+      <span style="display:block; font-size:12px; color:#666; margin-top:4px;">
+        毎日の食事改善に｜簡単・続けやすいメニュー多数
+      </span>
+    </a>
   </div>
+</div>
+
+
+
+
 
   <footer role="contentinfo">
   <hr style="width:60%; margin:auto; border:0.5px solid #ccc;">
@@ -222,6 +288,13 @@
        お問い合わせ
     </a>
   </p>
+
+    <!-- ❶ サイト全体のアフィリエイト開示（フッター用） -->
+<p role="note" style="margin-top:8px;font-size:12px;color:#777;line-height:1.6;">
+  当サイトのリンクの一部はアフィリエイト広告を含みます。リンクから商品・サービスを購入された場合、運営者に報酬が発生することがあります。
+  詳細は<a href="/privacy.html">プライバシーポリシー</a>をご確認ください。
+</p>
+
 
   <section id="disclaimer" style="margin-top:40px; font-size:14px; color:#666; line-height:1.6;">
     <h3>免責事項</h3>
@@ -282,6 +355,7 @@
   </script>
 </body>
 </html>
+
 
 
 
