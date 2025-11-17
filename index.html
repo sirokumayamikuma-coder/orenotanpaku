@@ -10,6 +10,7 @@
   <title>腎臓負担スコア計算ツール（β版）｜俺のタンパク</title>
   <meta name="description" content="日々の食事内容から腎臓への栄養負担を自動計算。タンパク質・カリウム・ナトリウムなど主要栄養素の影響を数値化し、健康的な食生活をサポートします。">
 
+  <!-- 構造化データ（そのままでOK） -->
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -44,26 +45,16 @@
   <meta name="twitter:card" content="summary_large_image">
   <meta property="og:locale" content="ja_JP">
 
- 
-
- <!-- Google tag (gtag.js) -->
-  <!-- Google Analytics 設定メモ:
-  正式な測定ID: G-P6QP4YM98R
-  プロパティ: orenotanpaku (ID: 509580168)
-  ※他の測定IDに変更しないこと
--->
+  <!-- Google tag (gtag.js) -->
+  <!-- 正式な測定ID: G-P6QP4YM98R -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-P6QP4YM98R"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
-
   gtag('config', 'G-P6QP4YM98R');
- 
-    
 </script>
 
-  
   <style>
     body {
       margin: 0;
@@ -79,6 +70,7 @@
     header {
       margin-top: 40px;
       text-align: center;
+      padding: 0 16px;
     }
 
     h1 {
@@ -90,16 +82,24 @@
     p.subtitle {
       color: #666;
       font-size: 0.95rem;
+      margin-bottom: 0.5em;
+    }
+
+    p.helper {
+      color: #777;
+      font-size: 0.85rem;
       margin-bottom: 2em;
+      line-height: 1.6;
     }
 
     .card {
       background: white;
       border-radius: 16px;
       box-shadow: 0 4px 20px rgba(0,0,0,0.05);
-      padding: 2em;
+      padding: 2em 1.6em;
       width: 90%;
       max-width: 420px;
+      margin-bottom: 24px;
     }
 
     .input-group {
@@ -111,6 +111,7 @@
     label {
       font-weight: 500;
       margin-bottom: 0.3em;
+      font-size: 0.95rem;
     }
 
     input {
@@ -119,51 +120,116 @@
       border: 1px solid #ccc;
       font-size: 1rem;
       outline: none;
-      transition: border-color 0.2s;
+      transition: border-color 0.2s, box-shadow 0.2s;
     }
 
     input:focus {
       border-color: #007aff;
+      box-shadow: 0 0 0 3px rgba(0,122,255,0.15);
+    }
+
+    .form-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 1.2em;
     }
 
     button {
-      background: #007aff;
-      color: white;
-      font-size: 1rem;
-      font-weight: 600;
       border: none;
-      padding: 0.8em;
       border-radius: 10px;
-      width: 100%;
       cursor: pointer;
-      transition: background 0.3s, transform 0.1s;
+      font-weight: 600;
+      transition: background 0.3s, transform 0.1s, box-shadow 0.2s;
     }
 
-    button:hover {
+    /* メインの計算ボタン */
+    #calcBtn {
+      background: #007aff;
+      color: #fff;
+      font-size: 1rem;
+      padding: 0.8em;
+      width: 100%;
+      box-shadow: 0 4px 12px rgba(0,122,255,0.25);
+    }
+
+    #calcBtn:hover {
       background: #005ecb;
       transform: translateY(-1px);
     }
 
+    #calcBtn:active {
+      transform: translateY(0);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    }
+
+    /* サンプル入力ボタン（軽いトーン） */
+    #sampleBtn {
+      background: #f3f4f6;
+      color: #374151;
+      font-size: 0.85rem;
+      padding: 0.6em;
+      width: 100%;
+    }
+
+    #sampleBtn:hover {
+      background: #e5e7eb;
+      transform: translateY(-1px);
+    }
+
     .result-card {
-      margin-top: 2em;
+      margin-top: 1.5em;
       background: white;
       border-radius: 16px;
       box-shadow: 0 2px 12px rgba(0,0,0,0.05);
       padding: 1.5em;
       text-align: center;
-      transition: opacity 0.3s ease;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity 0.4s ease, transform 0.4s ease, box-shadow 0.3s ease, border-color 0.3s ease, background 0.3s ease;
+      border: 2px solid transparent;
+    }
+
+    /* 結果カードが表示された状態 */
+    .result-card.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* 負担レベル別の色づけ */
+    .result-card.low {
+      border-color: #38bdf8;
+      background: linear-gradient(135deg, #eff6ff, #e0f2fe);
+    }
+
+    .result-card.mid {
+      border-color: #facc15;
+      background: linear-gradient(135deg, #fef9c3, #fef3c7);
+    }
+
+    .result-card.high {
+      border-color: #f97373;
+      background: linear-gradient(135deg, #fee2e2, #fecaca);
     }
 
     .score {
-      font-size: 2rem;
+      font-size: 2.2rem;
       font-weight: 700;
-      color: #007aff;
-      margin-bottom: 0.2em;
+      color: #111827;
+      margin-bottom: 0.1em;
     }
 
     .status {
       font-weight: 600;
-      font-size: 1.1rem;
+      font-size: 1.05rem;
+      margin-bottom: 0.4em;
+    }
+
+    .detail-text {
+      font-size: 0.85rem;
+      color: #4b5563;
+      line-height: 1.6;
+      margin-bottom: 0.8em;
     }
 
     footer {
@@ -171,6 +237,24 @@
       padding: 2em;
       font-size: 0.8rem;
       color: #888;
+      width: 100%;
+      max-width: 800px;
+    }
+
+    footer a {
+      color: #666;
+    }
+
+    @media (max-width: 640px) {
+      .card {
+        padding: 1.6em 1.2em;
+      }
+      h1 {
+        font-size: 1.5rem;
+      }
+      .score {
+        font-size: 2rem;
+      }
     }
   </style>
 </head>
@@ -178,165 +262,176 @@
   <header>
     <h1>腎臓負担スコア計算ツール（β版）</h1>
     <p class="subtitle">体重・水分量・タンパク質量から日々の腎臓負担をチェック</p>
+    <p class="helper">
+      ざっくりと「腎臓にどれくらい負担がかかっているか」を数値化するツールです。<br>
+      医療用ではないので、目安としてご利用ください。
+    </p>
   </header>
 
-  <div class="card">
+  <div class="card" aria-label="腎臓負担スコアの入力フォーム">
     <div class="input-group">
       <label for="weight">体重（kg）</label>
-      <input type="number" id="weight" placeholder="例：70" />
+      <input type="number" id="weight" placeholder="例：70" inputmode="decimal" />
     </div>
 
     <div class="input-group">
       <label for="protein">1日のタンパク質摂取量（g）</label>
-      <input type="number" id="protein" placeholder="例：120" />
+      <input type="number" id="protein" placeholder="例：120" inputmode="decimal" />
     </div>
 
     <div class="input-group">
       <label for="water">1日の水分摂取量（L）</label>
-      <input type="number" id="water" placeholder="例：2.0" step="0.1" />
+      <input type="number" id="water" placeholder="例：2.0" step="0.1" inputmode="decimal" />
     </div>
 
-    <button onclick="calculateScore()">計算する</button>
+    <div class="form-actions">
+      <button id="calcBtn" type="button" onclick="calculateScore()">計算する</button>
+      <button id="sampleBtn" type="button" onclick="fillSample()">サンプル値を入力して試す</button>
+    </div>
 
-<!-- 結果カード（フル版 / ミニ開示＋おすすめ枠付き） -->
-<div id="result" class="result-card" style="display:none;">
-  <!-- 計算結果表示 -->
-  <div class="score" id="scoreValue">0</div>
-  <div class="status" id="statusText">結果がここに表示されます</div>
+    <!-- 結果カード -->
+    <div id="result" class="result-card" style="display:none;" aria-live="polite">
+      <!-- 計算結果表示 -->
+      <div class="score" id="scoreValue">0</div>
+      <div class="status" id="statusText">結果がここに表示されます</div>
+      <p class="detail-text" id="detailText">
+        体重・タンパク質・水分量を入力して「計算する」を押してください。
+      </p>
 
-  <!-- ミニ開示（この下に表示するリンクが広告/アフィであることを明示） -->
-  <p role="note" style="margin:12px 0 8px; font-size:12px; color:#888; line-height:1.6;">
-    ※この下のリンクにはアフィリエイト広告が含まれる場合があります。
-    購入等により運営者に報酬が発生することがあります。詳細は
-    <a href="/privacy.html" style="color:#666; text-decoration:underline;">プライバシーポリシー</a> をご確認ください。
-  </p>
+      <!-- ミニ開示（この下に表示するリンクが広告/アフィであることを明示） -->
+      <p role="note" style="margin:12px 0 8px; font-size:12px; color:#888; line-height:1.6;">
+        ※この下のリンクにはアフィリエイト広告が含まれる場合があります。
+        購入等により運営者に報酬が発生することがあります。詳細は
+        <a href="/privacy.html" style="color:#666; text-decoration:underline;">プライバシーポリシー</a> をご確認ください。
+      </p>
 
-  <!-- おすすめ（アフィリエイト）リンク枠 -->
-  <div id="offer-list" class="offer-list" style="display:grid; gap:12px;">
+      <!-- おすすめ（アフィリエイト）リンク枠 -->
+      <div id="offer-list" class="offer-list" style="display:grid; gap:12px;">
 
-<!-- アフィリンク #1（健康直球便 / ブランド枠） -->
-  <a
-    href="https://px.a8.net/svt/ejp?a8mat=45I51L+FEAKZ6+5E7E+5ZEMQ"
-    target="_blank"
-    rel="sponsored noopener nofollow"
-    class="aff-link"
-    onclick="if(window.gtag){ gtag('event','affiliate_click',{ event_category:'affiliate', event_label:'健康直球便-ブランド枠'}); }"
-    style="
-      display:block; padding:12px 14px; border:1px solid #e5e7eb; border-radius:10px;
-      text-decoration:none; color:#111; background:#fff; box-shadow:0 2px 8px rgba(0,0,0,0.04);
-    "
-  >
-    <strong style="display:block; font-size:14px;">健康直球便｜高たんぱく&健康志向の定番</strong>
-    <span style="display:block; font-size:12px; color:#666; margin-top:4px;">
-      減塩商品も多く腎臓負担を減らす目的にも最適
-    </span>
-  </a>
+        <!-- アフィリンク #1（健康直球便 / ブランド枠） -->
+        <a
+          href="https://px.a8.net/svt/ejp?a8mat=45I51L+FEAKZ6+5E7E+5ZEMQ"
+          target="_blank"
+          rel="sponsored noopener nofollow"
+          class="aff-link"
+          aria-label="健康直球便：商品ページを新規タブで開く（広告リンク）"
+          onclick="if(window.gtag){ gtag('event','affiliate_click',{ event_category:'affiliate', event_label:'健康直球便-ブランド枠'}); }"
+          style="
+            display:block; padding:12px 14px; border:1px solid #e5e7eb; border-radius:10px;
+            text-decoration:none; color:#111; background:#fff; box-shadow:0 2px 8px rgba(0,0,0,0.04);
+          "
+        >
+          <strong style="display:block; font-size:14px;">健康直球便｜高たんぱく&健康志向の定番</strong>
+          <span style="display:block; font-size:12px; color:#666; margin-top:4px;">
+            減塩商品も多く腎臓負担を減らす目的にも最適。
+          </span>
+        </a>
 
-  <!-- （A8提供の1x1トラッキングピクセル）※そのまま保持でOK -->
-  <img border="0" width="1" height="1" src="https://www17.a8.net/0.gif?a8mat=45I51L+FEAKZ6+5E7E+5ZEMQ" alt="" aria-hidden="true">
+        <!-- （A8提供の1x1トラッキングピクセル）※そのまま保持でOK -->
+        <img border="0" width="1" height="1" src="https://www17.a8.net/0.gif?a8mat=45I51L+FEAKZ6+5E7E+5ZEMQ" alt="" aria-hidden="true">
 
+        <!-- アフィリンク #2（Myprotein / プロテイン枠） -->
+        <a
+          href="https://px.a8.net/svt/ejp?a8mat=45IB9C+5O7P9U+45DI+5YRHE"
+          target="_blank"
+          rel="sponsored noopener nofollow"
+          class="aff-link"
+          aria-label="Myprotein（プロテイン）：商品ページを新規タブで開く（広告リンク）"
+          onclick="if(window.gtag){ gtag('event','affiliate_click',{ event_category:'affiliate', event_label:'Myprotein-プロテイン枠'}); }"
+          style="
+            display:block; padding:12px 14px; border:1px solid #e5e7eb; border-radius:10px;
+            text-decoration:none; color:#111; background:#fff; box-shadow:0 2px 8px rgba(0,0,0,0.04);
+          "
+        >
+          <strong style="display:block; font-size:14px;">Myprotein｜高品質×低価格の定番プロテイン</strong>
+          <span style="display:block; font-size:12px; color:#666; margin-top:4px;">
+            コスパ重視のトレーニー向け。ホエイやEAAなど種類も豊富。
+          </span>
+        </a>
 
-   <!-- アフィリンク #2（Myprotein / プロテイン枠） -->
-<a
-  href="https://px.a8.net/svt/ejp?a8mat=45IB9C+5O7P9U+45DI+5YRHE"
-  target="_blank"
-  rel="sponsored noopener nofollow"
-  class="aff-link"
-  aria-label="Myprotein（プロテイン）：商品ページを新規タブで開く（広告リンク）"
-  onclick="if(window.gtag){ gtag('event','affiliate_click',{ event_category:'affiliate', event_label:'Myprotein-プロテイン枠'}); }"
-  style="
-    display:block; padding:12px 14px; border:1px solid #e5e7eb; border-radius:10px;
-    text-decoration:none; color:#111; background:#fff; box-shadow:0 2px 8px rgba(0,0,0,0.04);
-  "
->
-  <strong style="display:block; font-size:14px;">Myprotein｜高品質×低価格の定番プロテイン</strong>
-  <span style="display:block; font-size:12px; color:#666; margin-top:4px;">
-    1食あたりタンパク質◯g / 脂質◯g 目安。味の種類が豊富で継続しやすい。
-  </span>
-</a>
+        <!-- A8の1x1トラッキングピクセル（保持必須） -->
+        <img border="0" width="1" height="1"
+              src="https://www14.a8.net/0.gif?a8mat=45IB9C+5O7P9U+45DI+5YRHE"
+              alt="" aria-hidden="true" loading="lazy">
 
-<!-- A8の1x1トラッキングピクセル（保持必須） -->
-<img border="0" width="1" height="1"
-     src="https://www14.a8.net/0.gif?a8mat=45IB9C+5O7P9U+45DI+5YRHE"
-     alt="" aria-hidden="true" loading="lazy">
+        <!-- アフィリンク #3（Naturecan / CBD・健康志向枠） -->
+        <a
+          href="https://px.a8.net/svt/ejp?a8mat=45IB9C+5JG8FM+4RJK+BX3J6"
+          target="_blank"
+          rel="sponsored noopener nofollow"
+          class="aff-link"
+          aria-label="Naturecan（高品質CBD・健康志向ブランド）公式ページへの外部リンク"
+          onclick="if(window.gtag){ gtag('event','affiliate_click',{ event_category:'affiliate', event_label:'Naturecan-CBD枠'}); }"
+          style="
+            display:block; padding:12px 14px; border:1px solid #e5e7eb; border-radius:10px;
+            text-decoration:none; color:#111; background:#fff; box-shadow:0 2px 8px rgba(0,0,0,0.04);
+          "
+        >
+          <strong style="display:block; font-size:14px;">Naturecan｜高品質CBDで健康サポート</strong>
+          <span style="display:block; font-size:12px; color:#666; margin-top:4px;">
+            健康志向のサプリメントやCBD製品が充実。リラックス・睡眠サポート目的のトレーニーにも人気。
+          </span>
+        </a>
 
-    <!-- アフィリンク #3（Naturecan / CBD・健康志向枠） -->
-    <a
-      href="https://px.a8.net/svt/ejp?a8mat=45IB9C+5JG8FM+4RJK+BX3J6"
-      target="_blank"
-      rel="sponsored noopener nofollow"
-      class="aff-link"
-      aria-label="Naturecan（高品質CBD・健康志向ブランド）公式ページへの外部リンク"
-      onclick="if(window.gtag){ gtag('event','affiliate_click',{ event_category:'affiliate', event_label:'Naturecan-CBD枠'}); }"
-      style="
-        display:block; padding:12px 14px; border:1px solid #e5e7eb; border-radius:10px;
-        text-decoration:none; color:#111; background:#fff; box-shadow:0 2px 8px rgba(0,0,0,0.04);
-      "
-    >
-      <strong style="display:block; font-size:14px;">Naturecan｜高品質CBDで健康サポート</strong>
-      <span style="display:block; font-size:12px; color:#666; margin-top:4px;">
-        健康志向のサプリメントやCBD製品が充実。リラックス・睡眠サポート目的のトレーニーにも人気。
-      </span>
-    </a>
+        <!-- A8の1×1トラッキングピクセル（計測用） -->
+        <img
+          border="0"
+          width="1"
+          height="1"
+          src="https://www16.a8.net/0.gif?a8mat=45IB9C+5JG8FM+4RJK+BX3J6"
+          alt=""
+          aria-hidden="true"
+          loading="lazy"
+        >
 
-    <!-- A8の1×1トラッキングピクセル（計測用） -->
-    <img
-      border="0"
-      width="1"
-      height="1"
-      src="https://www16.a8.net/0.gif?a8mat=45IB9C+5JG8FM+4RJK+BX3J6"
-      alt=""
-      aria-hidden="true"
-      loading="lazy"
-    >
-
-
-  </div>
-</div>
-
-
-
-
+      </div><!-- /offer-list -->
+    </div><!-- /result-card -->
+  </div><!-- /card -->
 
   <footer role="contentinfo">
-  <hr style="width:60%; margin:auto; border:0.5px solid #ccc;">
-  
-  <p style="text-align:center; margin-top:20px;">
-    <a href="/privacy.html"
-       style="color:#666; text-decoration:none; cursor:pointer;"
-       onmouseover="this.style.textDecoration='underline';"
-       onmouseout="this.style.textDecoration='none';">
-       プライバシーポリシー・免責事項
-    </a>
-    　｜　
-    <a href="/contact.html"
-       style="color:#666; text-decoration:none; cursor:pointer;"
-       onmouseover="this.style.textDecoration='underline';"
-       onmouseout="this.style.textDecoration='none';">
-       お問い合わせ
-    </a>
-  </p>
-
-    <!-- ❶ サイト全体のアフィリエイト開示（フッター用） -->
-<p role="note" style="margin-top:8px;font-size:12px;color:#777;line-height:1.6;">
-  当サイトのリンクの一部はアフィリエイト広告を含みます。リンクから商品・サービスを購入された場合、運営者に報酬が発生することがあります。
-  詳細は<a href="/privacy.html">プライバシーポリシー</a>をご確認ください。
-</p>
-
-
-  <section id="disclaimer" style="margin-top:40px; font-size:14px; color:#666; line-height:1.6;">
-    <h3>免責事項</h3>
-    <p>
-      このツールは、国際的な栄養・運動ガイドライン（WHO、NIH、ACSMなど）を参考に設計されています。<br>
-      医療行為や診断を目的としたものではなく、健康バランス理解の補助としてご利用ください。
+    <hr style="width:60%; margin:auto; border:0.5px solid #ccc;">
+    
+    <p style="text-align:center; margin-top:20px;">
+      <a href="/privacy.html"
+        style="color:#666; text-decoration:none; cursor:pointer;"
+        onmouseover="this.style.textDecoration='underline';"
+        onmouseout="this.style.textDecoration='none';">
+        プライバシーポリシー・免責事項
+      </a>
+      　｜　
+      <a href="/contact.html"
+        style="color:#666; text-decoration:none; cursor:pointer;"
+        onmouseover="this.style.textDecoration='underline';"
+        onmouseout="this.style.textDecoration='none';">
+        お問い合わせ
+      </a>
     </p>
-  </section>
 
-  <p style="text-align:center; margin-top:20px;">© 2025 orenotanpaku.com</p>
-</footer>
+    <!-- サイト全体のアフィリエイト開示（フッター用） -->
+    <p role="note" style="margin-top:8px;font-size:12px;color:#777;line-height:1.6;">
+      当サイトのリンクの一部はアフィリエイト広告を含みます。リンクから商品・サービスを購入された場合、運営者に報酬が発生することがあります。
+      詳細は<a href="/privacy.html">プライバシーポリシー</a>をご確認ください。
+    </p>
 
+    <section id="disclaimer" style="margin-top:40px; font-size:14px; color:#666; line-height:1.6;">
+      <h3>免責事項</h3>
+      <p>
+        このツールは、国際的な栄養・運動ガイドライン（WHO、NIH、ACSMなど）を参考に設計されています。<br>
+        医療行為や診断を目的としたものではなく、健康バランス理解の補助としてご利用ください。
+      </p>
+    </section>
+
+    <p style="text-align:center; margin-top:20px;">© 2025 orenotanpaku.com</p>
+  </footer>
 
   <script>
+    // サンプル値を自動入力する関数
+    function fillSample() {
+      document.getElementById("weight").value = 70;
+      document.getElementById("protein").value = 120;
+      document.getElementById("water").value = 2.0;
+    }
+
     function calculateScore() {
       const weight = parseFloat(document.getElementById("weight").value);
       const protein = parseFloat(document.getElementById("protein").value);
@@ -354,55 +449,54 @@
       const hydrationFactor = water < 1.5 ? 1.2 : water > 3 ? 0.8 : 1.0;
 
       // 腎臓負担スコア（単純モデル）
-      const score = (proteinPerKg * 25) * hydrationFactor;
+      const rawScore = (proteinPerKg * 25) * hydrationFactor;
+      const score = Math.round(rawScore);
 
       let status = "";
+      let levelClass = "";
+
       if (score < 60) {
         status = "低負担：バランス良好";
+        levelClass = "low";
       } else if (score < 90) {
         status = "中負担：水分や食事バランスを意識しましょう";
+        levelClass = "mid";
       } else {
         status = "高負担：タンパク質摂取量や水分量を見直してください";
+        levelClass = "high";
       }
 
-      document.getElementById("scoreValue").textContent = Math.round(score);
-      document.getElementById("statusText").textContent = status;
-      document.getElementById("result").style.display = "block";
+      const detailText =
+        "体重 " + weight + "kg に対してタンパク質 " + protein + "g（約 " +
+        proteinPerKg.toFixed(1) + "g/kg）・水分 " + water.toFixed(1) +
+        "L の条件で算出した目安スコアです。";
 
+      const resultEl = document.getElementById("result");
+      const scoreEl = document.getElementById("scoreValue");
+      const statusEl = document.getElementById("statusText");
+      const detailEl = document.getElementById("detailText");
+
+      scoreEl.textContent = score;
+      statusEl.textContent = status;
+      detailEl.textContent = detailText;
+
+      // 表示とアニメーション用のクラス付け
+      resultEl.style.display = "block";
+      resultEl.classList.add("show");
+      resultEl.classList.remove("low", "mid", "high");
+      if (levelClass) {
+        resultEl.classList.add(levelClass);
+      }
+
+      // GA4イベント送信
       if (window.gtag) {
         gtag('event', 'calc_submit', {
           'event_category': 'tool',
           'event_label': 'kidney_score',
-          'value': Math.round(score)
-         // debug_mode: true
-            // send_to: 'G-P6QP4YM98R'
-          
+          'value': score
         });
       }
     }
   </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
