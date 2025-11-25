@@ -206,13 +206,11 @@
       border: 2px solid transparent;
     }
 
-    /* 結果カードが表示された状態 */
     .result-card.show {
       opacity: 1;
       transform: translateY(0);
     }
 
-    /* 負担レベル別の色づけ */
     .result-card.low {
       border-color: #38bdf8;
       background: linear-gradient(135deg, #eff6ff, #e0f2fe);
@@ -226,6 +224,11 @@
     .result-card.high {
       border-color: #f97373;
       background: linear-gradient(135deg, #fee2e2, #fecaca);
+    }
+
+   .result-card.good {
+      border-color: #4ade80;
+      background: linear-gradient(135deg, #ecfdf5, #dcfce7); /* やわらかいグリーン */
     }
 
     .score {
@@ -287,17 +290,36 @@
   <div class="card" aria-label="腎臓負担スコアの入力フォーム">
     <div class="input-group">
       <label for="weight">体重（kg）</label>
-      <input type="number" id="weight" placeholder="例：70" inputmode="decimal" />
+      <input
+        type="number"
+        id="weight"
+        placeholder="例：70"
+        inputmode="decimal"
+        min="1"
+      />
     </div>
 
     <div class="input-group">
       <label for="protein">1日のタンパク質摂取量（g）</label>
-      <input type="number" id="protein" placeholder="例：120" inputmode="decimal" />
+      <input
+        type="number"
+        id="protein"
+        placeholder="例：120"
+        inputmode="decimal"
+        min="0"
+      />
     </div>
 
     <div class="input-group">
       <label for="water">1日の水分摂取量（L）</label>
-      <input type="number" id="water" placeholder="例：2.0" step="0.1" inputmode="decimal" />
+      <input
+        type="number"
+        id="water"
+        placeholder="例：2.0"
+        step="0.1"
+        inputmode="decimal"
+        min="0.1"
+      />
     </div>
 
     <div class="input-group">
@@ -316,7 +338,6 @@
 
     <!-- 結果カード -->
     <div id="result" class="result-card" style="display:none;" aria-live="polite">
-      <!-- 計算結果表示 -->
       <div class="score" id="scoreValue">0</div>
       <div class="status" id="statusText">結果がここに表示されます</div>
       <p class="detail-text" id="detailText">
@@ -324,7 +345,10 @@
       </p>
 
       <!-- ミニ開示 -->
-      <p role="note" style="margin:12px 0 8px; font-size:12px; color:#888; line-height:1.6;">
+      <p
+        role="note"
+        style="margin:12px 0 8px; font-size:12px; color:#888; line-height:1.6; text-align:center;"
+      >
         ※この下のリンクにはアフィリエイト広告が含まれる場合があります。
         購入等により運営者に報酬が発生することがあります。詳細は
         <a href="/privacy.html" style="color:#666; text-decoration:underline;">プライバシーポリシー</a> をご確認ください。
@@ -353,7 +377,14 @@
         </a>
 
         <!-- A8 1x1トラッキングピクセル -->
-        <img border="0" width="1" height="1" src="https://www17.a8.net/0.gif?a8mat=45I51L+FEAKZ6+5E7E+5ZEMQ" alt="" aria-hidden="true">
+        <img
+          border="0"
+          width="1"
+          height="1"
+          src="https://www17.a8.net/0.gif?a8mat=45I51L+FEAKZ6+5E7E+5ZEMQ"
+          alt=""
+          aria-hidden="true"
+        >
 
         <!-- アフィリンク #2（Myprotein / プロテイン枠） -->
         <a
@@ -375,9 +406,15 @@
         </a>
 
         <!-- A8 1x1トラッキングピクセル -->
-        <img border="0" width="1" height="1"
-             src="https://www14.a8.net/0.gif?a8mat=45IB9C+5O7P9U+45DI+5YRHE"
-             alt="" aria-hidden="true" loading="lazy">
+        <img
+          border="0"
+          width="1"
+          height="1"
+          src="https://www14.a8.net/0.gif?a8mat=45IB9C+5O7P9U+45DI+5YRHE"
+          alt=""
+          aria-hidden="true"
+          loading="lazy"
+        >
 
         <!-- アフィリンク #3（Naturecan / CBD・健康志向枠） -->
         <a
@@ -408,7 +445,6 @@
           aria-hidden="true"
           loading="lazy"
         >
-
       </div><!-- /offer-list -->
     </div><!-- /result-card -->
   </div><!-- /card -->
@@ -458,124 +494,140 @@
       document.getElementById("activity").value = "mid"; // 週2〜3回トレーニング
     }
 
-function calculateScore() {
-  const weight = parseFloat(document.getElementById("weight").value);
-  const protein = parseFloat(document.getElementById("protein").value);
-  const water = parseFloat(document.getElementById("water").value);
-  const activity = document.getElementById("activity").value;
+    function calculateScore() {
+      const weight  = parseFloat(document.getElementById("weight").value);
+      const protein = parseFloat(document.getElementById("protein").value);
+      const water   = parseFloat(document.getElementById("water").value);
+      const activity = document.getElementById("activity").value;
 
-  if (isNaN(weight) || isNaN(protein) || isNaN(water)) {
-    alert("全ての項目を入力してください。");
-    return;
-  }
+      // 未入力チェック
+      if (isNaN(weight) || isNaN(protein) || isNaN(water)) {
+        alert("体重・タンパク質・水分量をすべて入力してください。");
+        return;
+      }
 
-  // 運動レベルごとの目安タンパク量 g/kg
-  let recommendedPerKg;
-  let activityLabel;
-  switch (activity) {
-    case "low":
-      recommendedPerKg = 1.0;
-      activityLabel = "ほぼ運動なし（デスクワーク中心）";
-      break;
-    case "mid":
-      recommendedPerKg = 1.6;
-      activityLabel = "週2〜3回トレーニング";
-      break;
-    case "high":
-      recommendedPerKg = 2.0;
-      activityLabel = "週4回以上の高強度トレーニング";
-      break;
-    default:
-      recommendedPerKg = 1.6;
-      activityLabel = "週2〜3回トレーニング";
-  }
+      // 値の妥当性チェック（ざっくり）
+      if (weight <= 0) {
+        alert("体重は1kg以上を入力してください。");
+        return;
+      }
+      if (protein < 0) {
+        alert("タンパク質量は0以上を入力してください。");
+        return;
+      }
+      if (water <= 0) {
+        alert("水分量は0より大きい値を入力してください。");
+        return;
+      }
 
-  const actualPerKg = protein / weight;
-  const recommendedTotal = recommendedPerKg * weight;
-  const ratio = actualPerKg / recommendedPerKg;
+      // 運動レベルごとの目安タンパク量 g/kg
+      let recommendedPerKg;
+      let activityLabel;
+      switch (activity) {
+        case "low":
+          recommendedPerKg = 1.0;
+          activityLabel = "ほぼ運動なし（デスクワーク中心）";
+          break;
+        case "mid":
+          recommendedPerKg = 1.6;
+          activityLabel = "週2〜3回トレーニング";
+          break;
+        case "high":
+          recommendedPerKg = 2.0;
+          activityLabel = "週4回以上の高強度トレーニング";
+          break;
+        default:
+          recommendedPerKg = 1.6;
+          activityLabel = "週2〜3回トレーニング";
+      }
 
-  // 水分補正
-  let hydrationFactor = 1.0;
-  let hydrationNote = "";
+      const actualPerKg     = protein / weight;
+      const recommendedTotal = recommendedPerKg * weight;
+      const ratio           = actualPerKg / recommendedPerKg;
 
-  if (water < 1.5) {
-    hydrationFactor = 1.15; 
-    hydrationNote = "水分が少なめなので負担が増えやすい状態です。";
-  } else if (water > 3.0) {
-    hydrationFactor = 0.9;
-    hydrationNote = "十分な水分が取れており負担がやや軽減されています。";
-  } else {
-    hydrationNote = "水分量はおおむね適正です。";
-  }
+      // 水分補正
+      let hydrationFactor = 1.0;
+      let hydrationNote = "";
 
-  // 負担スコア（タンパク質の過不足 × 水分補正）
-  let rawScore;
+      if (water < 1.5) {
+        hydrationFactor = 1.15; 
+        hydrationNote = "水分が少なめなので負担が増えやすい状態です。";
+      } else if (water > 3.0) {
+        hydrationFactor = 0.9;
+        hydrationNote = "十分な水分が取れており負担がやや軽減されています。";
+      } else {
+        hydrationNote = "水分量はおおむね適正です。";
+      }
 
-  if (ratio < 0.85) {
-    rawScore = 50 * hydrationFactor; // 不足だが負担は低い
+      // 負担スコア（タンパク質の過不足 × 水分補正）
+      let rawScore;
+
+      if (ratio < 0.85) {
+        // 不足だが腎臓への負担としては低い
+        rawScore = 50 * hydrationFactor;
+      } else if (ratio <= 1.15) {
+        // 理想レンジ
+        rawScore = 65 * hydrationFactor;
+      } else if (ratio <= 1.30) {
+        // やや過剰
+        rawScore = 85 * hydrationFactor;
+      } else {
+        // 過剰すぎ → 高負担
+        rawScore = 110 * hydrationFactor;
+      }
+
+      const score = Math.round(rawScore);
+
+      // 結果メッセージ
+      let status = "";
+      let advice = "";
+      let levelClass = "";
+
+    if (ratio < 0.85) {
+      status = "タンパク質不足気味";
+      advice = "目安より摂取が少ないため、もう少しタンパク質を追加しましょう。";
+      levelClass = "low";                 // 不足 → 現状どおり
   } else if (ratio <= 1.15) {
-    rawScore = 65 * hydrationFactor; // 理想レンジ
+      status = "良いバランスです";
+      advice = "運動レベルに対して適正なタンパク質量が摂取できています。";
+      levelClass = "good";                // ★ ここをgoodに
   } else if (ratio <= 1.30) {
-    rawScore = 85 * hydrationFactor; // やや過剰
+      status = "やや過剰気味";
+      advice = "目安より多く摂取しているため、量の調整か水分量のチェックを。";
+      levelClass = "mid";                 // やや過剰 → 注意寄りの黄色
   } else {
-    rawScore = 110 * hydrationFactor; // 過剰すぎ → 高負担
+      status = "高負担：過剰摂取";
+      advice = "タンパク質がかなり多めです。量を調整するか水分をより多く取りましょう。";
+      levelClass = "high";
   }
 
-  const score = Math.round(rawScore);
+      const detailText =
+        "あなたの運動レベル「" + activityLabel + "」の場合の目安タンパク質は約 " +
+        Math.round(recommendedTotal) + "g/日（" + recommendedPerKg.toFixed(1) +
+        "g/kg）。現在の摂取量は " + protein + "g です。" +
+        hydrationNote;
 
-  // 結果メッセージ
-  let status = "";
-  let advice = "";
-  let levelClass = "";
+      // 表示反映
+      const resultEl = document.getElementById("result");
+      document.getElementById("scoreValue").textContent = score;
+      document.getElementById("statusText").textContent = status;
+      document.getElementById("detailText").textContent = advice + " " + detailText;
 
-  if (ratio < 0.85) {
-    status = "タンパク質不足気味";
-    advice = "目安より摂取が少ないため、もう少しタンパク質を追加しましょう。";
-    levelClass = "low";
-  } else if (ratio <= 1.15) {
-    status = "良いバランスです";
-    advice = "運動レベルに対して適正なタンパク質量が摂取できています。";
-    levelClass = "mid";
-  } else if (ratio <= 1.30) {
-    status = "やや過剰気味";
-    advice = "目安より多く摂取しているため、量の調整か水分量のチェックを。";
-    levelClass = "mid";
-  } else {
-    status = "高負担：過剰摂取";
-    advice = "タンパク質がかなり多めです。量を調整するか水分をより多く取りましょう。";
-    levelClass = "high";
-  }
+      // 色付け
+      resultEl.style.display = "block";
+      resultEl.classList.add("show");
+      resultEl.classList.remove("low", "mid", "high");
+      resultEl.classList.add(levelClass);
 
-  const detailText =
-    "あなたの運動レベル「" + activityLabel + "」の場合の目安タンパク質は約 " +
-    Math.round(recommendedTotal) + "g/日（" + recommendedPerKg.toFixed(1) +
-    "g/kg）。現在の摂取量は " + protein + "g です。" +
-    hydrationNote;
-
-  // 表示反映
-  const resultEl = document.getElementById("result");
-  document.getElementById("scoreValue").textContent = score;
-  document.getElementById("statusText").textContent = status;
-  document.getElementById("detailText").textContent = advice + " " + detailText;
-
-  // 色付け
-  resultEl.style.display = "block";
-  resultEl.classList.add("show");
-  resultEl.classList.remove("low", "mid", "high");
-  resultEl.classList.add(levelClass);
-
-  // GA4イベント送信
-  if (window.gtag) {
-    gtag('event', 'calc_submit', {
-      'event_category': 'tool',
-      'event_label': 'kidney_score',
-      'value': score
-    });
-  }
-}
-
-    
+      // GA4イベント送信
+      if (window.gtag) {
+        gtag('event', 'calc_submit', {
+          'event_category': 'tool',
+          'event_label': 'kidney_score',
+          'value': score
+        });
+      }
+    }
   </script>
 </body>
 </html>
-
