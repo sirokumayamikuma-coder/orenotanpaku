@@ -10,32 +10,32 @@
   <title>腎臓負担スコア計算ツール（β版）｜俺のタンパク</title>
   <meta name="description" content="日々の食事内容から腎臓への栄養負担を自動計算。タンパク質・カリウム・ナトリウムなど主要栄養素の影響を数値化し、健康的な食生活をサポートします。">
 
-  <!-- 構造化データ（そのままでOK） -->
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "WebApplication",
-  "name": "腎臓負担スコア計算ツール（β版）",
-  "url": "https://orenotanpaku.com/",
-  "description": "体重・タンパク質摂取量・水分摂取量から日々の腎臓負担を自動計算できる無料Webツールです。",
-  "applicationCategory": ["HealthApplication", "FitnessApplication"],
-  "operatingSystem": "All",
-  "creator": {
-    "@type": "Organization",
-    "name": "俺のタンパク"
-  },
-  "inLanguage": "ja",
-  "offers": {
-    "@type": "Offer",
-    "price": "0",
-    "priceCurrency": "JPY"
+  <!-- 構造化データ -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "腎臓負担スコア計算ツール（β版）",
+    "url": "https://orenotanpaku.com/",
+    "description": "体重・タンパク質摂取量・水分摂取量から日々の腎臓負担を自動計算できる無料Webツールです。",
+    "applicationCategory": ["HealthApplication", "FitnessApplication"],
+    "operatingSystem": "All",
+    "creator": {
+      "@type": "Organization",
+      "name": "俺のタンパク"
+    },
+    "inLanguage": "ja",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "JPY"
+    }
   }
-}
-</script>
+  </script>
   
   <meta name="keywords" content="腎臓, タンパク質, カリウム, ナトリウム, 腎機能, 栄養管理, 腎臓病, 食事計算, 栄養バランス, 健康維持, 食事記録">
 
-  <!-- 🔹 OGP設定（SNSシェア最適化） -->
+  <!-- 🔹 OGP設定 -->
   <meta property="og:type" content="website">
   <meta property="og:title" content="腎臓負担スコア計算ツール(β版)｜俺のタンパク">
   <meta property="og:description" content="摂取した食事内容から腎臓負担をスコア化し、健康的な栄養摂取を支援する無料ツール。筋トレ中やダイエット中でも腎臓を守りながら賢くタンパク質を摂ろう。">
@@ -47,13 +47,13 @@
 
   <!-- Google tag (gtag.js) -->
   <!-- 正式な測定ID: G-P6QP4YM98R -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-P6QP4YM98R"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-P6QP4YM98R');
-</script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-P6QP4YM98R"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-P6QP4YM98R');
+  </script>
 
   <style>
     body {
@@ -128,6 +128,22 @@
       box-shadow: 0 0 0 3px rgba(0,122,255,0.15);
     }
 
+    /* 運動レベル用セレクト */
+    select {
+      padding: 0.7em;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 1rem;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      background-color: #fff;
+    }
+
+    select:focus {
+      border-color: #007aff;
+      box-shadow: 0 0 0 3px rgba(0,122,255,0.15);
+    }
+
     .form-actions {
       display: flex;
       flex-direction: column;
@@ -163,7 +179,7 @@
       box-shadow: 0 2px 8px rgba(0,0,0,0.15);
     }
 
-    /* サンプル入力ボタン（軽いトーン） */
+    /* サンプル入力ボタン */
     #sampleBtn {
       background: #f3f4f6;
       color: #374151;
@@ -284,6 +300,15 @@
       <input type="number" id="water" placeholder="例：2.0" step="0.1" inputmode="decimal" />
     </div>
 
+    <div class="input-group">
+      <label for="activity">運動レベル</label>
+      <select id="activity">
+        <option value="low">ほぼ運動なし（デスクワーク中心）</option>
+        <option value="mid" selected>週2〜3回トレーニング</option>
+        <option value="high">週4回以上の高強度トレーニング</option>
+      </select>
+    </div>
+
     <div class="form-actions">
       <button id="calcBtn" type="button" onclick="calculateScore()">計算する</button>
       <button id="sampleBtn" type="button" onclick="fillSample()">サンプル値を入力して試す</button>
@@ -295,10 +320,10 @@
       <div class="score" id="scoreValue">0</div>
       <div class="status" id="statusText">結果がここに表示されます</div>
       <p class="detail-text" id="detailText">
-        体重・タンパク質・水分量を入力して「計算する」を押してください。
+        体重・タンパク質・水分量・運動レベルを入力して「計算する」を押してください。
       </p>
 
-      <!-- ミニ開示（この下に表示するリンクが広告/アフィであることを明示） -->
+      <!-- ミニ開示 -->
       <p role="note" style="margin:12px 0 8px; font-size:12px; color:#888; line-height:1.6;">
         ※この下のリンクにはアフィリエイト広告が含まれる場合があります。
         購入等により運営者に報酬が発生することがあります。詳細は
@@ -327,7 +352,7 @@
           </span>
         </a>
 
-        <!-- （A8提供の1x1トラッキングピクセル）※そのまま保持でOK -->
+        <!-- A8 1x1トラッキングピクセル -->
         <img border="0" width="1" height="1" src="https://www17.a8.net/0.gif?a8mat=45I51L+FEAKZ6+5E7E+5ZEMQ" alt="" aria-hidden="true">
 
         <!-- アフィリンク #2（Myprotein / プロテイン枠） -->
@@ -349,10 +374,10 @@
           </span>
         </a>
 
-        <!-- A8の1x1トラッキングピクセル（保持必須） -->
+        <!-- A8 1x1トラッキングピクセル -->
         <img border="0" width="1" height="1"
-              src="https://www14.a8.net/0.gif?a8mat=45IB9C+5O7P9U+45DI+5YRHE"
-              alt="" aria-hidden="true" loading="lazy">
+             src="https://www14.a8.net/0.gif?a8mat=45IB9C+5O7P9U+45DI+5YRHE"
+             alt="" aria-hidden="true" loading="lazy">
 
         <!-- アフィリンク #3（Naturecan / CBD・健康志向枠） -->
         <a
@@ -373,7 +398,7 @@
           </span>
         </a>
 
-        <!-- A8の1×1トラッキングピクセル（計測用） -->
+        <!-- A8 1x1トラッキングピクセル -->
         <img
           border="0"
           width="1"
@@ -393,17 +418,17 @@
     
     <p style="text-align:center; margin-top:20px;">
       <a href="/privacy.html"
-        style="color:#666; text-decoration:none; cursor:pointer;"
-        onmouseover="this.style.textDecoration='underline';"
-        onmouseout="this.style.textDecoration='none';">
-        プライバシーポリシー・免責事項
+         style="color:#666; text-decoration:none; cursor:pointer;"
+         onmouseover="this.style.textDecoration='underline';"
+         onmouseout="this.style.textDecoration='none';">
+         プライバシーポリシー・免責事項
       </a>
       　｜　
       <a href="/contact.html"
-        style="color:#666; text-decoration:none; cursor:pointer;"
-        onmouseover="this.style.textDecoration='underline';"
-        onmouseout="this.style.textDecoration='none';">
-        お問い合わせ
+         style="color:#666; text-decoration:none; cursor:pointer;"
+         onmouseover="this.style.textDecoration='underline';"
+         onmouseout="this.style.textDecoration='none';">
+         お問い合わせ
       </a>
     </p>
 
@@ -430,12 +455,14 @@
       document.getElementById("weight").value = 70;
       document.getElementById("protein").value = 120;
       document.getElementById("water").value = 2.0;
+      document.getElementById("activity").value = "mid"; // 週2〜3回トレーニング
     }
 
     function calculateScore() {
       const weight = parseFloat(document.getElementById("weight").value);
       const protein = parseFloat(document.getElementById("protein").value);
       const water = parseFloat(document.getElementById("water").value);
+      const activity = document.getElementById("activity").value;
 
       if (isNaN(weight) || isNaN(protein) || isNaN(water)) {
         alert("全ての項目を入力してください。");
@@ -445,11 +472,36 @@
       // タンパク質摂取量 (g/kg体重)
       const proteinPerKg = protein / weight;
 
+      // 運動レベルごとの目標タンパク質量（g/kg）
+      let recommendedPerKg;
+      let activityLabel;
+      switch (activity) {
+        case "low":
+          recommendedPerKg = 1.0; // ほぼ運動なし
+          activityLabel = "ほぼ運動なし（デスクワーク中心）";
+          break;
+        case "mid":
+          recommendedPerKg = 1.6; // 一般的なトレーニー
+          activityLabel = "週2〜3回トレーニング";
+          break;
+        case "high":
+          recommendedPerKg = 2.0; // ハードトレーニー
+          activityLabel = "週4回以上の高強度トレーニング";
+          break;
+        default:
+          recommendedPerKg = 1.6;
+          activityLabel = "週2〜3回トレーニング";
+      }
+
       // 水分補正係数（2Lを基準）
       const hydrationFactor = water < 1.5 ? 1.2 : water > 3 ? 0.8 : 1.0;
 
-      // 腎臓負担スコア（単純モデル）
-      const rawScore = (proteinPerKg * 25) * hydrationFactor;
+      // 実際の摂取量が目標に対してどれくらいか（比率）
+      const ratioToTarget = proteinPerKg / recommendedPerKg;
+
+      // 腎臓負担スコア
+      // 目標どおり（ratio=1.0）でスコア70前後になるように調整
+      const rawScore = ratioToTarget * 70 * hydrationFactor;
       const score = Math.round(rawScore);
 
       let status = "";
@@ -466,10 +518,14 @@
         levelClass = "high";
       }
 
+      // 目標タンパク質量（g/日）
+      const recommendedTotal = recommendedPerKg * weight;
+
       const detailText =
-        "体重 " + weight + "kg に対してタンパク質 " + protein + "g（約 " +
-        proteinPerKg.toFixed(1) + "g/kg）・水分 " + water.toFixed(1) +
-        "L の条件で算出した目安スコアです。";
+        "体重 " + weight + "kg・運動レベル「" + activityLabel + "」の場合の目安タンパク質は約 " +
+        Math.round(recommendedTotal) + "g/日（" + recommendedPerKg.toFixed(1) +
+        "g/kg）。実際の摂取量 " + protein + "g と水分 " + water.toFixed(1) +
+        "L から腎臓負担スコアを算出しています。";
 
       const resultEl = document.getElementById("result");
       const scoreEl = document.getElementById("scoreValue");
@@ -500,5 +556,3 @@
   </script>
 </body>
 </html>
-
-
