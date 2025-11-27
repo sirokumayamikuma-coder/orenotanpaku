@@ -226,7 +226,7 @@
       background: linear-gradient(135deg, #fee2e2, #fecaca);
     }
 
-   .result-card.good {
+    .result-card.good {
       border-color: #4ade80;
       background: linear-gradient(135deg, #ecfdf5, #dcfce7); /* やわらかいグリーン */
     }
@@ -249,6 +249,49 @@
       color: #4b5563;
       line-height: 1.6;
       margin-bottom: 0.8em;
+    }
+
+    /* スコア凡例 */
+    .legend {
+      margin-top: 8px;
+      font-size: 0.75rem;
+      color: #6b7280;
+      text-align: left;
+    }
+
+    .legend-title {
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .legend-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 2px;
+    }
+
+    .legend-color {
+      width: 14px;
+      height: 14px;
+      border-radius: 9999px;
+      display: inline-block;
+    }
+
+    .legend-color.low {
+      background: #38bdf8; /* 負担少なめ */
+    }
+
+    .legend-color.good {
+      background: #22c55e; /* 良好 */
+    }
+
+    .legend-color.mid {
+      background: #facc15; /* やや高め */
+    }
+
+    .legend-color.high {
+      background: #f97373; /* 高負担 */
     }
 
     footer {
@@ -343,6 +386,33 @@
       <p class="detail-text" id="detailText">
         体重・タンパク質・水分量・運動レベルを入力して「計算する」を押してください。
       </p>
+
+      <!-- 高負担向けの水分アドバイス -->
+      <p
+        id="hydrationSuggestion"
+        style="margin-top:4px; font-size:0.8rem; color:#6b7280; line-height:1.6; text-align:left;"
+      ></p>
+
+      <!-- スコア凡例 -->
+      <div class="legend" aria-label="腎臓負担スコアの凡例">
+        <p class="legend-title">スコアの目安</p>
+        <div class="legend-row">
+          <span class="legend-color low"></span>
+          <span>〜60：負担少なめ（不足〜低負担ゾーン）</span>
+        </div>
+        <div class="legend-row">
+          <span class="legend-color good"></span>
+          <span>61〜80：バランス良好ゾーン</span>
+        </div>
+        <div class="legend-row">
+          <span class="legend-color mid"></span>
+          <span>81〜95：やや高め（負担注意）</span>
+        </div>
+        <div class="legend-row">
+          <span class="legend-color high"></span>
+          <span>96以上：高負担ゾーン（要見直し）</span>
+        </div>
+      </div>
 
       <!-- ミニ開示 -->
       <p
@@ -541,9 +611,9 @@
           activityLabel = "週2〜3回トレーニング";
       }
 
-      const actualPerKg     = protein / weight;
+      const actualPerKg      = protein / weight;
       const recommendedTotal = recommendedPerKg * weight;
-      const ratio           = actualPerKg / recommendedPerKg;
+      const ratio            = actualPerKg / recommendedPerKg;
 
       // 水分補正
       let hydrationFactor = 1.0;
@@ -578,28 +648,70 @@
 
       const score = Math.round(rawScore);
 
+      // ベーススコア（水分補正なし）と水分アドバイス用
+      const baseScore = rawScore / hydrationFactor;
+      let hydrationSuggestionText = "";
+
       // 結果メッセージ
       let status = "";
       let advice = "";
       let levelClass = "";
 
-    if (ratio < 0.85) {
-      status = "タンパク質不足気味";
-      advice = "目安より摂取が少ないため、もう少しタンパク質を追加しましょう。";
-      levelClass = "low";                 // 不足 → 現状どおり
-  } else if (ratio <= 1.15) {
-      status = "良いバランスです";
-      advice = "運動レベルに対して適正なタンパク質量が摂取できています。";
-      levelClass = "good";                // ★ ここをgoodに
-  } else if (ratio <= 1.30) {
-      status = "やや過剰気味";
-      advice = "目安より多く摂取しているため、量の調整か水分量のチェックを。";
-      levelClass = "mid";                 // やや過剰 → 注意寄りの黄色
-  } else {
-      status = "高負担：過剰摂取";
-      advice = "タンパク質がかなり多めです。量を調整するか水分をより多く取りましょう。";
-      levelClass = "high";
-  }
+      if (ratio < 0.85) {
+        status = "タンパク質不足気味";
+        advice = "目安より摂取が少ないため、もう少しタンパク質を追加しましょう。";
+        levelClass = "low"; // 不足
+      } else if (ratio <= 1.15) {
+        status = "良いバランスです";
+        advice = "運動レベルに対して適正なタンパク質量が摂取できています。";
+        levelClass = "good"; // 良好ゾーン
+      } else if (ratio <= 1.30) {
+        status = "やや過剰気味";
+        advice = "目安より多く摂取しているため、量の調整か水分量のチェックを。";
+        levelClass = "mid"; // 注意ゾーン
+      } else {
+        status = "高負担：過剰摂取";
+        advice = "タンパク質がかなり多めです。量を調整するか水分をより多く取りましょう。";
+        levelClass = "high"; // 高負担ゾーン
+      }
+
+      // 高負担のときだけ水分アドバイスを表示
+      if (levelClass === "high") {
+        const currentWater = water;
+
+        // 1.5L & 3.0L にした場合のスコア（ロジック上の最大改善）
+        const scoreAt15 = Math.round(baseScore * 1.0); // 水分補正 = 1.0
+        const scoreAt30 = Math.round(baseScore * 0.9); // 水分補正 = 0.9
+
+        if (currentWater < 1.5) {
+          const addTo15 = (1.5 - currentWater).toFixed(1);
+          const addTo30 = (3.0 - currentWater).toFixed(1);
+
+          hydrationSuggestionText =
+            "水分を増やすことでスコアを下げられます。まずはあと " + addTo15 +
+            "L 追加して 1.5L 程度を目安にすると、スコアは約 " + scoreAt15 +
+            " 点まで下がる想定です。さらに合計 3.0L まで増やすと、約 " +
+            scoreAt30 + " 点まで下げられます。";
+        } else if (currentWater < 3.0) {
+          const addTo30 = (3.0 - currentWater).toFixed(1);
+
+          hydrationSuggestionText =
+            "水分量はやや足りている状態ですが、あと " + addTo30 +
+            "L 増やして合計 3.0L 程度にすると、スコアは約 " + scoreAt30 +
+            " 点まで下げられます。";
+        } else {
+          hydrationSuggestionText =
+            "水分量はすでに十分なレベルです。これ以上増やしてもスコア改善は小さいため、タンパク質量そのものの見直しを優先しましょう。";
+        }
+
+        // 水分だけで「バランス良好ゾーン」まで下がらない場合の補足
+        const balancedMaxScore = 80; // 凡例の「バランス良好ゾーン」の上限
+        if (scoreAt30 > balancedMaxScore) {
+          hydrationSuggestionText +=
+            " なお、このツールのロジック上、水分だけではバランス良好ゾーン（スコア " +
+            balancedMaxScore + " 点以下）まで下げることは難しいため、タンパク質量を減らすことも検討してください。";
+        }
+      }
 
       const detailText =
         "あなたの運動レベル「" + activityLabel + "」の場合の目安タンパク質は約 " +
@@ -612,6 +724,7 @@
       document.getElementById("scoreValue").textContent = score;
       document.getElementById("statusText").textContent = status;
       document.getElementById("detailText").textContent = advice + " " + detailText;
+      document.getElementById("hydrationSuggestion").textContent = hydrationSuggestionText;
 
       // 色付け
       resultEl.style.display = "block";
@@ -631,4 +744,3 @@
   </script>
 </body>
 </html>
-
