@@ -714,16 +714,16 @@
       }
 
       const detailText =
-        "<br>あなたの運動レベル「" + activityLabel + "」の場合の目安タンパク質は約 " +
-        Math.round(recommendedTotal) + "g/日（" + recommendedPerKg.toFixed(1) +
-        "g/kg）。現在の摂取量は " + protein + "g です。" +
-        hydrationNote;
+      "<br>あなたの運動レベル「" + activityLabel + "」の場合の目安タンパク質は約 " +
+      Math.round(recommendedTotal) + "g/日（" + recommendedPerKg.toFixed(1) +
+      "g/kg）。現在の摂取量は " + protein + "g です。" +
+      hydrationNote;
 
       // 表示反映
       const resultEl = document.getElementById("result");
       document.getElementById("scoreValue").textContent = score;
       document.getElementById("statusText").textContent = status;
-      document.getElementById("detailText").textContent = advice + " " + detailText;
+      document.getElementById("detailText").innerHTML = advice + detailText;
       document.getElementById("hydrationSuggestion").textContent = hydrationSuggestionText;
 
       // 色付け
@@ -744,5 +744,6 @@
   </script>
 </body>
 </html>
+
 
 
