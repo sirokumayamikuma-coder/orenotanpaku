@@ -1,4 +1,4 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html lang="ja">
 <head>
   <meta charset="UTF-8" />
@@ -34,7 +34,6 @@
   </script>
   
   <meta name="keywords" content="腎臓, タンパク質, 水分, 腎機能, 筋トレ, プロテイン, 栄養管理, 腎臓ケア, 食事管理, 健康維持">
-
 
   <!-- 🔹 OGP設定 -->
   <meta property="og:type" content="website">
@@ -232,13 +231,6 @@
       background: linear-gradient(135deg, #ecfdf5, #dcfce7); /* やわらかいグリーン */
     }
 
-    .score {
-      font-size: 2.2rem;
-      font-weight: 700;
-      color: #111827;
-      margin-bottom: 0.1em;
-    }
-
     .status {
       font-weight: 600;
       font-size: 1.05rem;
@@ -250,49 +242,7 @@
       color: #4b5563;
       line-height: 1.6;
       margin-bottom: 0.8em;
-    }
-
-    /* スコア凡例 */
-    .legend {
-      margin-top: 8px;
-      font-size: 0.75rem;
-      color: #6b7280;
       text-align: left;
-    }
-
-    .legend-title {
-      font-weight: 600;
-      margin-bottom: 4px;
-    }
-
-    .legend-row {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      margin-bottom: 2px;
-    }
-
-    .legend-color {
-      width: 14px;
-      height: 14px;
-      border-radius: 9999px;
-      display: inline-block;
-    }
-
-    .legend-color.low {
-      background: #38bdf8; /* 負担少なめ */
-    }
-
-    .legend-color.good {
-      background: #22c55e; /* 良好 */
-    }
-
-    .legend-color.mid {
-      background: #facc15; /* やや高め */
-    }
-
-    .legend-color.high {
-      background: #f97373; /* 高負担 */
     }
 
     footer {
@@ -314,9 +264,6 @@
       }
       h1 {
         font-size: 1.5rem;
-      }
-      .score {
-        font-size: 2rem;
       }
     }
   </style>
@@ -382,38 +329,16 @@
 
     <!-- 結果カード -->
     <div id="result" class="result-card" style="display:none;" aria-live="polite">
-      <div class="score" id="scoreValue">0</div>
       <div class="status" id="statusText">結果がここに表示されます</div>
       <p class="detail-text" id="detailText">
         体重・タンパク質・水分量・運動レベルを入力して「計算する」を押してください。
       </p>
 
-      <!-- 高負担向けの水分アドバイス -->
+      <!-- 水分アドバイス -->
       <p
         id="hydrationSuggestion"
         style="margin-top:4px; font-size:0.8rem; color:#6b7280; line-height:1.6; text-align:left;"
       ></p>
-
-      <!-- スコア凡例 -->
-      <div class="legend" aria-label="腎臓ケアたんぱくバランススコアの凡例">
-        <p class="legend-title">スコアの目安（腎臓ケア）</p>
-        <div class="legend-row">
-          <span class="legend-color low"></span>
-          <span>〜60：摂取控えめ〜低負担</span>
-        </div>
-        <div class="legend-row">
-          <span class="legend-color good"></span>
-          <span>61〜80：バランス良好</span>
-        </div>
-        <div class="legend-row">
-          <span class="legend-color mid"></span>
-          <span>81〜95：やや多め（見直し候補）</span>
-        </div>
-        <div class="legend-row">
-          <span class="legend-color high"></span>
-          <span>96以上：多め（腎臓ケア的に要調整）</span>
-        </div>
-      </div>
 
       <!-- ミニ開示 -->
       <p
@@ -422,7 +347,7 @@
       >
         ※この下のリンクにはアフィリエイト広告が含まれる場合があります。
         購入等により運営者に報酬が発生することがあります。詳細は
-        <a href="/privacy.html" style="color:#666; text-decoration:underline;">プライバシーポリシー</a> をご確認ください。
+        <a href="/privacy.html" style="color:#666; text-decoration:underline;">プライバシーポリシー</a>をご確認ください。
       </p>
 
       <!-- おすすめ（アフィリエイト）リンク枠 -->
@@ -566,9 +491,9 @@
     }
 
     function calculateScore() {
-      const weight  = parseFloat(document.getElementById("weight").value);
-      const protein = parseFloat(document.getElementById("protein").value);
-      const water   = parseFloat(document.getElementById("water").value);
+      const weight   = parseFloat(document.getElementById("weight").value);
+      const protein  = parseFloat(document.getElementById("protein").value);
+      const water    = parseFloat(document.getElementById("water").value);
       const activity = document.getElementById("activity").value;
 
       // 未入力チェック
@@ -612,140 +537,108 @@
           activityLabel = "週2〜3回トレーニング";
       }
 
-      const actualPerKg      = protein / weight;
-      const recommendedTotal = recommendedPerKg * weight;
-      const ratio            = actualPerKg / recommendedPerKg;
+      const actualPerKg      = protein / weight;              // 実際の g/kg
+      const recommendedTotal = recommendedPerKg * weight;     // 目安の総タンパク量 g/日
+      const ratio            = actualPerKg / recommendedPerKg; // 目安に対する比率
 
-      // 水分補正
-      let hydrationFactor = 1.0;
-      let hydrationNote = "";
-
-      if (water < 1.5) {
-        hydrationFactor = 1.15; 
-        hydrationNote = "水分が少なめなので負担が増えやすい状態です。";
-      } else if (water > 3.0) {
-        hydrationFactor = 0.9;
-        hydrationNote = "十分な水分が取れており負担がやや軽減されています。";
-      } else {
-        hydrationNote = "水分量はおおむね適正です。";
-      }
-
-      // 負担スコア（タンパク質の過不足 × 水分補正）
-      let rawScore;
-
-      if (ratio < 0.85) {
-        // 不足だが腎臓への負担としては低い
-        rawScore = 50 * hydrationFactor;
-      } else if (ratio <= 1.15) {
-        // 理想レンジ
-        rawScore = 65 * hydrationFactor;
-      } else if (ratio <= 1.30) {
-        // やや過剰
-        rawScore = 85 * hydrationFactor;
-      } else {
-        // 過剰すぎ → 高負担
-        rawScore = 110 * hydrationFactor;
-      }
-
-      const score = Math.round(rawScore);
-
-      // ベーススコア（水分補正なし）と水分アドバイス用
-      const baseScore = rawScore / hydrationFactor;
-      let hydrationSuggestionText = "";
-
-      // 結果メッセージ
-      let status = "";
-      let advice = "";
+      // ── タンパク質の傾向判定 ─────────────────
+      let proteinTendency;
+      let proteinAdvice;
       let levelClass = "";
 
       if (ratio < 0.85) {
-        status = "タンパク質やや控えめ";
-        advice = "腎臓への負担は少なめです。筋肉量を増やしたい場合は、少し増量も検討してください。";
-        levelClass = "low"; // 不足
+        proteinTendency = "タンパク質やや控えめ";
+        proteinAdvice =
+          "腎臓への負担は少なめで、どちらかといえば控えめな量です。筋肉量を増やしたい場合は、体調や健診結果を確認しながら少し増量しても良いかもしれません。";
+        levelClass = "low";
       } else if (ratio <= 1.15) {
-        status = "良いバランスです";
-        advice = "運動量に対してちょうど良い範囲です。腎臓ケアの目安として良好ですが、状態の確認は健診結果を優先してください。";
-        levelClass = "good"; // 良好ゾーン
+        proteinTendency = "タンパク質おおむね目安範囲内";
+        proteinAdvice =
+          "運動量に対しておおむね目安範囲内です。腎臓ケアの観点でも大きな過不足はないゾーンです。";
+        levelClass = "good";
       } else if (ratio <= 1.30) {
-        status = "やや多め（注意）";
-        advice = "タンパク量はやや多めです。長く続ける場合は量や水分を見直し、健診で腎機能もチェックしておくと安心です。";
-        levelClass = "mid"; // 注意ゾーン
+        proteinTendency = "タンパク質やや多め";
+        proteinAdvice =
+          "目安よりやや多めです。長期的に続ける場合は量の微調整や水分摂取、定期的な健診での確認がおすすめです。";
+        levelClass = "mid";
       } else {
-        status = "多め（腎臓ケア的に要調整）";
-        advice = "目安よりかなり多めです。タンパク量と水分量を調整しつつ、定期的にeGFRや尿たんぱくなどを健診で確認することをおすすめします。";
-        levelClass = "high"; // 高負担ゾーン
+        proteinTendency = "タンパク質多め（腎臓ケア的には要調整）";
+        proteinAdvice =
+          "目安より多めの摂取です。腎臓ケアの観点ではタンパク質量を見直したり、水分をしっかり摂ること、定期的な健診でeGFRや尿たんぱくなどを確認することをおすすめします。";
+        levelClass = "high";
       }
 
-      // 高負担のときだけ水分アドバイスを表示
-      if (levelClass === "high") {
-        const currentWater = water;
+      // ── 水分量の傾向判定 ─────────────────────
+      let waterTendency;
+      let hydrationNote;
 
-        // 1.5L & 3.0L にした場合のスコア（ロジック上の最大改善）
-        const scoreAt15 = Math.round(baseScore * 1.0); // 水分補正 = 1.0
-        const scoreAt30 = Math.round(baseScore * 0.9); // 水分補正 = 0.9
-
-        if (currentWater < 1.5) {
-          const addTo15 = (1.5 - currentWater).toFixed(1);
-          const addTo30 = (3.0 - currentWater).toFixed(1);
-
-          hydrationSuggestionText =
-            "水分を増やすことでスコアを下げられます。まずはあと " + addTo15 +
-            "L 追加して 1.5L 程度を目安にすると、スコアは約 " + scoreAt15 +
-            " 点まで下がる想定です。さらに合計 3.0L まで増やすと、約 " +
-            scoreAt30 + " 点まで下げられます。";
-        } else if (currentWater < 3.0) {
-          const addTo30 = (3.0 - currentWater).toFixed(1);
-
-          hydrationSuggestionText =
-            "水分量はやや足りている状態ですが、あと " + addTo30 +
-            "L 増やして合計 3.0L 程度にすると、スコアは約 " + scoreAt30 +
-            " 点まで下げられます。";
-        } else {
-          hydrationSuggestionText =
-            "水分量はすでに十分なレベルです。これ以上増やしてもスコア改善は小さいため、タンパク質量そのものの見直しを優先しましょう。";
-        }
-
-        // 水分だけで「バランス良好ゾーン」まで下がらない場合の補足
-        const balancedMaxScore = 80; // 凡例の「バランス良好ゾーン」の上限
-        if (scoreAt30 > balancedMaxScore) {
-          hydrationSuggestionText +=
-            " なお、このツールのロジック上、水分だけではバランス良好ゾーン（スコア " +
-            balancedMaxScore + " 点以下）まで下げることは難しいため、タンパク質量を減らすことも検討してください。";
-        }
+      if (water < 1.5) {
+        waterTendency = "水分少なめ";
+        hydrationNote =
+          "水分が少なめなので、腎臓ケアの目安としては1日あたり合計1.5L前後を目標に、こまめな水分補給を意識したい状態です。";
+      } else if (water <= 3.0) {
+        waterTendency = "水分量おおむね目安範囲内";
+        hydrationNote =
+          "水分量はこのツールの目安レンジ（1.5〜3.0L程度）の範囲内です。運動量や発汗量に応じて、必要に応じて調整していきましょう。";
+      } else {
+        waterTendency = "水分多め";
+        hydrationNote =
+          "水分量は多めで、脱水リスクは低い状態と考えられます。むくみや心疾患などがない場合は、今の量を無理に減らす必要はありません。";
       }
 
+      // 上部メイン表示文（傾向のまとめ）
+      const combinedStatus =
+        "あなたは「" + proteinTendency + "・" + waterTendency + "」の傾向があります。";
+
+      // 詳細説明（目安値＋現在値）
       const detailText =
-      "<br>あなたの運動レベル「" + activityLabel + "」の場合の目安タンパク質は約 " +
-      Math.round(recommendedTotal) + "g/日（" + recommendedPerKg.toFixed(1) +
-      "g/kg）。現在の摂取量は " + protein + "g です。" +
-      hydrationNote;
+        "あなたの運動レベル「" + activityLabel + "」の場合の目安タンパク質は約 " +
+        Math.round(recommendedTotal) + "g/日（" + recommendedPerKg.toFixed(1) + "g/kg）です。" +
+        "<br>現在のタンパク質摂取量は " + protein + "g（" + actualPerKg.toFixed(2) + "g/kg）です。" +
+        "<br>水分摂取量は " + water.toFixed(1) +
+        "L です。このツールでは 1.5〜3.0L 程度を目安レンジとしています。" +
+        "<br><br>" + proteinAdvice + "<br>" + hydrationNote;
+
+      // 水分に関する一言アドバイス（textのみ・スコアは使わない）
+      let hydrationSuggestionText = "";
+      if (water < 1.5) {
+        const addTo15 = (1.5 - water).toFixed(1);
+        hydrationSuggestionText =
+          "目安としては、まず「1日合計1.5L前後」を目標に、あと " + addTo15 +
+          "L ほど水分量を増やしてみるのがおすすめです。運動量や季節によっては、もう少し多めを意識しても構いません。";
+      } else if (water > 3.0) {
+        hydrationSuggestionText =
+          "水分量は十分と考えられます。むくみや息切れなどが気になる場合は、医師や専門家に相談したうえで量を調整してください。";
+      } else {
+        hydrationSuggestionText =
+          "水分量は目安レンジ内です。発汗が多い日やトレーニングが長時間になる日は、状況に応じて少し多めを意識しても良いでしょう。";
+      }
 
       // 表示反映
       const resultEl = document.getElementById("result");
-      document.getElementById("scoreValue").textContent = score;
-      document.getElementById("statusText").textContent = status;
-      document.getElementById("detailText").innerHTML = advice + detailText;
+      document.getElementById("statusText").textContent = combinedStatus;
+      document.getElementById("detailText").innerHTML = detailText;
       document.getElementById("hydrationSuggestion").textContent = hydrationSuggestionText;
 
-      // 色付け
+      // 色付け（傾向に応じて背景だけ変える）
       resultEl.style.display = "block";
       resultEl.classList.add("show");
       resultEl.classList.remove("low", "mid", "high", "good");
-      resultEl.classList.add(levelClass);
+      if (levelClass) {
+        resultEl.classList.add(levelClass);
+      }
 
-      // GA4イベント送信
+      // GA4イベント送信（スコアは使わず、入力状況だけ送る）
       if (window.gtag) {
         gtag('event', 'calc_submit', {
-          'event_category': 'tool',
-          'event_label': 'kidney_score',
-          'value': score
+          event_category: 'tool',
+          event_label: 'kidney_pattern',
+          protein_ratio: ratio,
+          protein_g_per_kg: actualPerKg,
+          water_liters: water
         });
       }
     }
   </script>
 </body>
 </html>
-
-
-
-
