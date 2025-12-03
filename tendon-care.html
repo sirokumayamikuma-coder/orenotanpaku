@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>腱ケア情報ハブ｜俺のタンパク</title>
+  <meta name="description" content="スポーツや筋トレで腱に不安を感じる人のための情報ハブ。腱のケア・負担を減らす考え方をわかりやすくまとめています。">
+
+  <link rel="icon" href="/favicon.ico" type="image/x-icon">
+
+  <style>
+    body {
+      margin: 0;
+      font-family: "Segoe UI", "Helvetica Neue", sans-serif;
+      background: linear-gradient(135deg, #f7f9fc, #e8ecf3);
+      color: #333;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    /* 上部タブ（index.htmlと同じ） */
+    .top-tabs-wrapper {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      margin-top: 12px;
+    }
+    .top-tabs {
+      display: flex;
+      gap: 8px;
+      padding: 6px 10px;
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 9999px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
+      border: 1px solid #e5e7eb;
+      font-size: 0.85rem;
+    }
+    .top-tabs a {
+      padding: 6px 12px;
+      border-radius: 9999px;
+      border: 1px solid transparent;
+      text-decoration: none;
+      color: #374151;
+      white-space: nowrap;
+      transition: background 0.2s, border-color 0.2s, color 0.2s;
+    }
+    .top-tabs a:hover {
+      background: #f3f4f6;
+      border-color: #d1d5db;
+    }
+    .top-tabs a.active {
+      background: #007aff;
+      border-color: #007aff;
+      color: #fff;
+      font-weight: 600;
+    }
+
+    main {
+      width: 100%;
+      max-width: 720px;
+      padding: 32px 16px 40px;
+    }
+
+    h1 {
+      font-size: 1.6rem;
+      margin-bottom: 0.5em;
+      text-align: center;
+    }
+
+    p.lead {
+      font-size: 0.95rem;
+      color: #555;
+      text-align: center;
+      line-height: 1.7;
+      margin-bottom: 2em;
+    }
+
+    section {
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+      padding: 1.6em 1.4em;
+      margin-bottom: 16px;
+      font-size: 0.95rem;
+      line-height: 1.7;
+    }
+
+    section h2 {
+      font-size: 1.05rem;
+      margin-top: 0;
+      margin-bottom: 0.6em;
+    }
+
+    ul {
+      padding-left: 1.3em;
+      margin: 0.4em 0 0;
+    }
+
+    footer {
+      margin-top: auto;
+      padding: 2em 1em;
+      font-size: 0.8rem;
+      color: #888;
+      text-align: center;
+    }
+    footer a {
+      color: #666;
+    }
+  </style>
+</head>
+<body>
+  <!-- 上部タブナビ（腱ケア側を active に） -->
+  <div class="top-tabs-wrapper" aria-label="サイト内メニュー">
+    <nav class="top-tabs">
+      <a href="/index.html">腎臓ケアツール</a>
+      <a href="/tendon-care.html" class="active">腱ケア情報</a>
+      <a href="/coming-soon.html">その他コンテンツ</a>
+    </nav>
+  </div>
+
+  <main>
+    <h1>腱ケア情報ハブ（β版）</h1>
+    <p class="lead">
+      スポーツや筋トレで腱に不安を感じる人向けに、<br>
+      「どう守るか・どう鍛えるか」を整理していくページです。
+    </p>
+
+    <section>
+      <h2>こんな悩みを想定しています</h2>
+      <ul>
+        <li>ジャンプやダッシュでアキレス腱や膝の腱がいつも張る・痛い</li>
+        <li>トレーニングを続けたいが、腱を壊さないか不安</li>
+        <li>どこまでが「ただの張り」で、どこからが「休んだ方がいい状態」か分からない</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>今後追加していく予定のコンテンツ例</h2>
+      <ul>
+        <li>腱と筋肉の違い・役割の整理</li>
+        <li>腱を守りながらジャンプ力・スピードを上げるトレーニングの考え方</li>
+        <li>腱に負担をかけやすいフォームと、避けたいNGパターン</li>
+        <li>痛みが出たときにまず確認したいチェックリスト</li>
+      </ul>
+      <p style="margin-top:0.8em; font-size:0.85rem; color:#666;">
+        ※医学的な診断・治療は扱わず、あくまでセルフケアとトレーニングの考え方を整理することを目的にしています。
+      </p>
+    </section>
+  </main>
+
+  <footer>
+    <p>
+      当サイトの情報は一般的なセルフケア・トレーニングの考え方をまとめたものであり、<br>
+      医療行為や診断を目的としたものではありません。痛みが強い場合や長引く場合は必ず医療機関を受診してください。
+    </p>
+    <p style="margin-top:12px;">
+      <a href="/privacy.html">プライバシーポリシー・免責事項</a> ｜ 
+      <a href="/contact.html">お問い合わせ</a>
+    </p>
+    <p style="margin-top:8px;">© 2025 orenotanpaku.com</p>
+  </footer>
+</body>
+</html>
