@@ -4,8 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <title>腱ケア情報ハブ｜俺のタンパク</title>
-  <meta name="description" content="スポーツや筋トレで腱に不安を感じる人のための情報ハブ。腱のケア・負担を減らす考え方をわかりやすくまとめています。">
+  <title>腱ケア情報ハブ（β版）｜俺のタンパク</title>
+  <meta name="description" content="スポーツや筋トレで腱に不安を感じる人のための情報ハブ。腱のケアや負担を減らす考え方をわかりやすくまとめていくページです。">
 
   <link rel="icon" href="/favicon.ico" type="image/x-icon">
 
@@ -21,7 +21,7 @@
       min-height: 100vh;
     }
 
-    /* 上部タブ（index.htmlと同じ） */
+    /* 上部タブ（index.htmlと揃える） */
     .top-tabs-wrapper {
       width: 100%;
       display: flex;
@@ -105,9 +105,21 @@
       font-size: 0.8rem;
       color: #888;
       text-align: center;
+      width: 100%;
+      max-width: 800px;
     }
     footer a {
       color: #666;
+    }
+
+    @media (max-width: 640px) {
+      .top-tabs {
+        font-size: 0.8rem;
+        padding: 4px 8px;
+      }
+      .top-tabs a {
+        padding: 4px 8px;
+      }
     }
   </style>
 </head>
@@ -117,36 +129,34 @@
     <nav class="top-tabs">
       <a href="/index.html">腎臓ケアツール</a>
       <a href="/tendon-care.html" class="active">腱ケア情報</a>
-      <a href="/coming-soon.html">その他コンテンツ</a>
     </nav>
   </div>
 
   <main>
     <h1>腱ケア情報ハブ（β版）</h1>
     <p class="lead">
-      スポーツや筋トレで腱に不安を感じる人向けに、<br>
-      「どう守るか・どう鍛えるか」を整理していくページです。
+      スポーツや筋トレで「腱」に不安を感じる人のためのページです。<br>
+      どう守るか・どう鍛えるかの考え方を、少しずつ整理していきます。
     </p>
 
     <section>
-      <h2>こんな悩みを想定しています</h2>
+      <h2>想定している悩み</h2>
       <ul>
-        <li>ジャンプやダッシュでアキレス腱や膝の腱がいつも張る・痛い</li>
-        <li>トレーニングを続けたいが、腱を壊さないか不安</li>
-        <li>どこまでが「ただの張り」で、どこからが「休んだ方がいい状態」か分からない</li>
+        <li>ジャンプやダッシュで、アキレス腱・膝周りの腱がすぐ張る／痛くなる</li>
+        <li>トレーニングを続けたいが、腱を壊してしまわないか不安</li>
+        <li>「ただの張り」なのか「休んだ方がいい状態」なのか判断に迷う</li>
       </ul>
     </section>
 
     <section>
-      <h2>今後追加していく予定のコンテンツ例</h2>
+      <h2>このページで目指すこと</h2>
       <ul>
-        <li>腱と筋肉の違い・役割の整理</li>
-        <li>腱を守りながらジャンプ力・スピードを上げるトレーニングの考え方</li>
-        <li>腱に負担をかけやすいフォームと、避けたいNGパターン</li>
-        <li>痛みが出たときにまず確認したいチェックリスト</li>
+        <li>腱と筋肉の違い・負担がかかりやすい動き方の整理</li>
+        <li>腱を守りながらジャンプ力やスピードを伸ばすトレーニングの考え方</li>
+        <li>痛みや違和感が出たときのセルフチェックの視点</li>
       </ul>
       <p style="margin-top:0.8em; font-size:0.85rem; color:#666;">
-        ※医学的な診断・治療は扱わず、あくまでセルフケアとトレーニングの考え方を整理することを目的にしています。
+        ※医学的な診断・治療を行うものではなく、セルフケアとトレーニングの考え方を整理することを目的としています。
       </p>
     </section>
   </main>
